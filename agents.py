@@ -14,7 +14,7 @@ class Agent:
         self.instructions = instructions
         self.backstory = backstory
         api_key = os.getenv("OPENAI_API_KEY")
-        print(f"Using API key: {api_key[:5]}...{api_key[-5:]}")  # Print first and last 5 characters
+        print(f"Agent {self.name} using API key: {api_key[:5]}...{api_key[-5:] if api_key else 'None'}")
         self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7, openai_api_key=api_key)
 
     def display_message(self, message: str, is_thinking=False):

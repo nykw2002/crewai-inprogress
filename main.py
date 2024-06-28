@@ -7,12 +7,13 @@ from config import KNOWLEDGE_BASE_DIR
 from mongodb_storage import save_chat, load_chats
 import uuid
 import os
-print("Environment variables:", os.environ)
+
 load_dotenv()
 
 
 
 def main():
+    print("OPENAI_API_KEY:", os.getenv("OPENAI_API_KEY"))
     st.set_page_config(page_title="Procesor de Documente pentru Licitații", layout="wide")
     load_custom_css()
     
