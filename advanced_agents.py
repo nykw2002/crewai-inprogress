@@ -2,6 +2,17 @@ from agents import Agent, Manager, Crew
 from typing import List
 import streamlit as st
 import re
+from internet_search import search_internet
+
+class InternetEnabledAgent(Agent):
+    def process(self, input_data: str, knowledge_base_used: bool = False, file_summary: str = "") -> str:
+        # Existing processing logic...
+        
+        if "search the internet for" in result_text.lower():
+            search_query = result_text.split("search the internet for ")[-1].split(".")[0]
+            search_result = search_internet(search_query)
+            result_text += f"\n\nInternet search results: {search_result}"
+
 
 class LegalAnalyst(Agent):
     def __init__(self, name: str, instructions: str, backstory: str):
@@ -60,11 +71,11 @@ class InteractiveManager(Manager):
 
         crew_output = []
         for agent in crew:
-            self.display_message(f"Assigning task to {agent.name}...", is_thinking=True)
-            agent_task = f"Analyze the following task from your perspective and provide insights. If you need clarification, ask questions.\nTask: {input_data}"
-            self.display_message(f"Instructions for {agent.name}: {agent_task}")
-            
-            agent_output = agent.process(agent_task, knowledge_base_used, file_summary)
+            agent_output = agent.process(input_data, knowledge_base_used, file_summary)
+            if "QUESTION:" in agent_output:
+                question = agent_output.split("QUESTION:")[1].strip()
+                answer = self.get_answer_from_other_agents(crew, agent, question)
+                agent_output += f"\nANSWER: {answer}"
             
             # Check if the agent has questions
             questions = re.findall(r'\?', agent_output)
@@ -81,6 +92,14 @@ class InteractiveManager(Manager):
         final_output = self.resolve_conflicts(crew_output)
         
         return self.process(final_output, knowledge_base_used, file_summary)
+
+    def get_answer_from_other_agents(self, crew, asking_agent, question):
+        answers = []
+        for agent in crew:
+            if agent != asking_agent:
+                answer = agent.process(f"Please answer: {question}", False, "")
+                answers.append(f"{agent.name}: {answer}")
+        return "\n".join(answers)
 
     def address_questions(self, output: str) -> str:
         # Implement logic to address questions, possibly by asking the user or other agents

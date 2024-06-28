@@ -1,5 +1,5 @@
 import streamlit as st
-from mongodb_storage import save_agent_configs, load_agent_configs, save_chat, load_chats
+from mongodb_storage import save_agent_configs, load_agent_configs
 from utils import save_to_knowledge_base, delete_from_knowledge_base, get_knowledge_base_files
 from config import KNOWLEDGE_BASE_DIR
 
@@ -56,9 +56,7 @@ def setup_ui():
 def chat_interface():
     user_input = st.text_input("Scrieți mesajul dvs. aici...")
     uploaded_file = st.file_uploader("Încărcați un fișier (opțional)", type=["txt", "pdf"])
-    if st.button("Trimite"):
-        return user_input, uploaded_file
-    return None, None
+    return user_input, uploaded_file
 
 def display_result(result):
     st.subheader("Rezultatul Procesării")

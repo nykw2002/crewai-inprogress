@@ -1,7 +1,7 @@
-from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
 import os
 import streamlit as st
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
 
 MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = "licitatie_processor"
@@ -11,8 +11,8 @@ try:
     client.admin.command('ismaster')
     db = client[DB_NAME]
     st.success("MongoDB connection successful")
-except ConnectionFailure:
-    st.warning("MongoDB connection is not available. Using default configurations.")
+except ConnectionFailure as e:
+    st.error(f"MongoDB connection failed: {str(e)}")
     db = None
 
 def save_agent_configs(configs):
