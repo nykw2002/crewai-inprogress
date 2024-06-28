@@ -22,7 +22,6 @@ def main():
     # Main content area
     st.title("Procesor de Documente pentru Licitații")
     
-    # You can add more main content here
     st.write("Bine ați venit la procesorul nostru de documente pentru licitații!")
     st.write("Utilizați interfața de chat de mai jos pentru a interacționa cu agenții noștri.")
 

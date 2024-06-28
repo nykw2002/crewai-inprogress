@@ -59,11 +59,11 @@ def setup_ui():
     return agent_configs, save_config
 
 def chat_interface():
-    st.text_input("Scrieți mesajul dvs. aici...", key="user_input")
+    user_input = st.text_input("Scrieți mesajul dvs. aici...")
     uploaded_file = st.file_uploader("Încărcați un fișier (opțional)", type=["txt", "pdf"])
     if st.button("Trimite"):
-        # Process the input and file here
-        pass
+        return user_input, uploaded_file
+    return None, None
 
 def display_result(result):
     st.subheader("Rezultatul Procesării")

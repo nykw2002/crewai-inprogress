@@ -3,14 +3,16 @@ from pymongo.errors import ConnectionFailure
 import os
 import streamlit as st
 
-MONGO_URI = os.getenv("MONGO_URI", "your_default_connection_string_here")
+MONGO_URI = os.getenv("MONGO_URI")
+DB_NAME = "licitatie_processor"
 
 try:
     client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
     client.admin.command('ismaster')
-    db = client["crewai"]
+    db = client[DB_NAME]
+    st.success("MongoDB connection successful")
 except ConnectionFailure:
-    st.error("Failed to connect to MongoDB. Please check your connection string and network settings.")
+    st.warning("MongoDB connection is not available. Using default configurations.")
     db = None
 
 def save_agent_configs(configs):
