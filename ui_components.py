@@ -1,7 +1,7 @@
 import streamlit as st
-from .mongodb_storage import save_agent_configs, load_agent_configs, save_chat, load_chats
-from .utils import save_to_knowledge_base, delete_from_knowledge_base, get_knowledge_base_files
-from .config import KNOWLEDGE_BASE_DIR
+from mongodb_storage import save_agent_configs, load_agent_configs, save_chat, load_chats
+from utils import save_to_knowledge_base, delete_from_knowledge_base, get_knowledge_base_files
+from config import KNOWLEDGE_BASE_DIR
 
 def setup_ui():
     load_custom_css()
