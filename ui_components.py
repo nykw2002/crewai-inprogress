@@ -3,14 +3,19 @@ from mongodb_storage import save_agent_configs, load_agent_configs, save_chat, l
 from utils import save_to_knowledge_base, delete_from_knowledge_base, get_knowledge_base_files
 from config import KNOWLEDGE_BASE_DIR
 
+import streamlit as st
+from mongodb_storage import save_agent_configs, load_agent_configs
+from utils import save_to_knowledge_base, delete_from_knowledge_base, get_knowledge_base_files
+from config import KNOWLEDGE_BASE_DIR
+
 def setup_ui():
     load_custom_css()
-    st.sidebar.markdown('<h1 class="futuristic-title">Procesor de Documente pentru Licitații</h1>', unsafe_allow_html=True)
+    st.sidebar.title("Procesor de Documente pentru Licitații")
     
     agent_configs = load_agent_configs()
     
     # Knowledge Base Section
-    st.sidebar.markdown('<p class="futuristic-input">Baza de Cunoștințe</p>', unsafe_allow_html=True)
+    st.sidebar.subheader("Baza de Cunoștințe")
     kb_files = st.sidebar.file_uploader("Încărcați fișiere în Baza de Cunoștințe", accept_multiple_files=True, key="kb_files_uploader")
     if kb_files:
         for file in kb_files:
@@ -18,7 +23,7 @@ def setup_ui():
             st.sidebar.success(f"S-a adăugat {file.name} în Baza de Cunoștințe")
 
     # Display and manage Knowledge Base files
-    st.sidebar.markdown("### Fișiere curente în Baza de Cunoștințe")
+    st.sidebar.subheader("Fișiere curente în Baza de Cunoștințe")
     for idx, file in enumerate(get_knowledge_base_files(KNOWLEDGE_BASE_DIR)):
         col1, col2 = st.sidebar.columns([3, 1])
         col1.write(file)
@@ -28,7 +33,7 @@ def setup_ui():
             st.experimental_rerun()
 
     # Agent customization
-    st.sidebar.markdown('<p class="futuristic-input">Personalizare Agenți</p>', unsafe_allow_html=True)
+    st.sidebar.subheader("Personalizare Agenți")
     agent_names = ["Manager", "Cercetător", "Scriitor", "Analist", "Expert Financiar"]
     for agent_name in agent_names:
         with st.sidebar.expander(f"Configurare {agent_name}"):
@@ -54,44 +59,14 @@ def setup_ui():
     return agent_configs, save_config
 
 def chat_interface():
-    st.markdown('<div id="chat-container"></div>', unsafe_allow_html=True)
-    
-    # Chat history
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    # Chat input
-    prompt = st.chat_input("Scrieți mesajul dvs. aici...")
+    st.text_input("Scrieți mesajul dvs. aici...", key="user_input")
     uploaded_file = st.file_uploader("Încărcați un fișier (opțional)", type=["txt", "pdf"])
-
-    if prompt:
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        if uploaded_file:
-            st.session_state.messages.append({"role": "user", "content": f"Fișier încărcat: {uploaded_file.name}"})
-            with st.chat_message("user"):
-                st.markdown(f"Fișier încărcat: {uploaded_file.name}")
-
-        # Here you would process the prompt and file with your agents
-        # For now, we'll just echo the input
-        response = f"Ați spus: {prompt}"
-        if uploaded_file:
-            response += f"\nȘi ați încărcat fișierul: {uploaded_file.name}"
-
-        st.session_state.messages.append({"role": "assistant", "content": response})
-        with st.chat_message("assistant"):
-            st.markdown(response)
-
-    return prompt, uploaded_file
+    if st.button("Trimite"):
+        # Process the input and file here
+        pass
 
 def display_result(result):
-    st.markdown('<p class="futuristic-title">Rezultatul Procesării</p>', unsafe_allow_html=True)
+    st.subheader("Rezultatul Procesării")
     st.write(result)
 
 def load_custom_css():

@@ -19,14 +19,21 @@ def main():
     if 'user_id' not in st.session_state:
         st.session_state.user_id = str(uuid.uuid4())
 
-    # Chat interface
-    prompt, uploaded_file = chat_interface()
+    # Main content area
+    st.title("Procesor de Documente pentru Licitații")
+    
+    # You can add more main content here
+    st.write("Bine ați venit la procesorul nostru de documente pentru licitații!")
+    st.write("Utilizați interfața de chat de mai jos pentru a interacționa cu agenții noștri.")
 
-    if prompt or uploaded_file:
+    # Chat interface
+    user_input, uploaded_file = chat_interface()
+
+    if user_input or uploaded_file:
         with st.spinner("Se procesează..."):
             try:
                 manager, crew = create_advanced_agents_and_crew(agent_configs)
-                input_data = prompt or ""
+                input_data = user_input or ""
                 file_summary = ""
                 if uploaded_file:
                     _, file_summary = process_file(uploaded_file)
@@ -41,7 +48,7 @@ def main():
 
                 # Save chat to MongoDB
                 chat_data = {
-                    "prompt": prompt,
+                    "user_input": user_input,
                     "file_name": uploaded_file.name if uploaded_file else None,
                     "result": result
                 }
