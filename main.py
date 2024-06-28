@@ -6,7 +6,8 @@ from utils import process_file, get_knowledge_base_files
 from config import KNOWLEDGE_BASE_DIR
 from mongodb_storage import save_chat, load_chats
 import uuid
-
+import os
+print("Environment variables:", os.environ)
 load_dotenv()
 
 

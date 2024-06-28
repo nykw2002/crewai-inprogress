@@ -13,7 +13,9 @@ class Agent:
         self.name = name
         self.instructions = instructions
         self.backstory = backstory
-        self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7, openai_api_key=os.getenv("OPENAI_API_KEY"))
+        api_key = os.getenv("OPENAI_API_KEY")
+        print(f"Using API key: {api_key[:5]}...{api_key[-5:]}")  # Print first and last 5 characters
+        self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7, openai_api_key=api_key)
 
     def display_message(self, message: str, is_thinking=False):
         agent_class = self.name.lower().replace(' ', '-')
