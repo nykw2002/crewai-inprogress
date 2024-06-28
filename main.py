@@ -1,13 +1,15 @@
 import streamlit as st
 from dotenv import load_dotenv
-from advanced_agents import create_advanced_agents_and_crew
-from ui_components import setup_ui, chat_interface, display_result, load_custom_css
-from utils import process_file, get_knowledge_base_files
-from config import KNOWLEDGE_BASE_DIR
-from mongodb_storage import save_chat, load_chats
+from .advanced_agents import create_advanced_agents_and_crew
+from .ui_components import setup_ui, chat_interface, display_result, load_custom_css
+from .utils import process_file, get_knowledge_base_files
+from .config import KNOWLEDGE_BASE_DIR
+from .mongodb_storage import save_chat, load_chats
 import uuid
 
 load_dotenv()
+
+
 
 def main():
     st.set_page_config(page_title="Procesor de Documente pentru Licitații", layout="wide")
