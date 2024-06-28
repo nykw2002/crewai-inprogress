@@ -11,7 +11,10 @@ class InternetEnabledAgent(Agent):
         if "search the internet for" in result_text.lower():
             search_query = result_text.split("search the internet for ")[-1].split(".")[0]
             search_result = search_internet(search_query)
-            result_text += f"\n\nInternet search results: {search_result}"
+            if search_result[0] != "Internet search is not available due to missing SerpAPI package.":
+                result_text += f"\n\nInternet search results: {search_result}"
+            else:
+                result_text += f"\n\n{search_result[0]}"
 
 
 class LegalAnalyst(Agent):
